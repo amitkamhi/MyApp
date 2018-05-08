@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_photo_details"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.example.kamhi.myapp.PhotoDetails">
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonPictureOption" />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:cropToPadding="true"
+        android:paddingBottom="10dp"
+        android:scaleType="center"
+        android:hapticFeedbackEnabled="false"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="54dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:layout_marginStart="54dp"
+        android:layout_alignBaseline="@+id/date"
+        android:textStyle="normal|bold|italic"
+        android:layout_alignBottom="@+id/date"
+        android:layout_alignStart="@+id/photo" />
+
+    <TextView
+        android:text="date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/date"
+        android:layout_marginTop="38dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/photo"
+        android:layout_marginEnd="66dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:gravity="center_horizontal|center"
+        android:textSize="18sp"
+        android:text="title"
+        android:textStyle="normal|bold|italic"
+        android:textAllCaps="true"
+        android:textIsSelectable="true"
+        android:ems="10"
+        android:background="@drawable/input_outline"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:layout_below="@+id/photo"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/description"
+        android:gravity="center_horizontal|center"
+        android:textSize="18sp"
+        android:text="description"
+        android:textStyle="normal|italic"
+        android:ems="10"
+        android:background="@drawable/input_outline"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:layout_below="@+id/title"
+        android:layout_alignStart="@+id/photo" />
+
+</RelativeLayout>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "34758881563",
+    "firebase_url": "https://myapp-e45b8.firebaseio.com",
+    "project_id": "myapp-e45b8",
+    "storage_bucket": "myapp-e45b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34758881563:android:60fdb2d4879edaf7",
+        "android_client_info": {
+          "package_name": "com.example.kamhi.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34758881563-hj41n25cujnnahccq4fb1hspvo3c10a3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6MzrPNeHVGxfy76v4V4NJAat4Y8nHR3o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
