@@ -3,19 +3,18 @@ package com.example.kamhi.myapp;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    DatabaseReference databaseReferencePhotos;
+// The home screen, shows all photos that had been added to the app, allow acsses to users list and to account screen
+
+    static DatabaseReference databaseReferencePhotos;
     GridView photosList;
     Button buttonGoToAccount;
     Button buttonSeeAllUsers;
@@ -43,33 +44,8 @@ public class MainActivity extends Activity {
         if(currentUserUid == null){
             startActivity(new Intent(MainActivity.this, OptionsActivity.class));
         }
-        else{
-            FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    currentUserMoney = Integer.parseInt(dataSnapshot.getValue().toString());
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    currentUserDeals = Integer.parseInt(dataSnapshot.getValue().toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-
-        databaseReferencePhotos = FirebaseDatabase.getInstance().getReference().child("photos");
-        //databaseReferencePhotos.keepSynced(true);
+        databaseReferencePhotos.keepSynced(true);
         databaseReferencePhotos.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,6 +63,7 @@ public class MainActivity extends Activity {
 
         photosList = (GridView) findViewById(R.id.photos);
         photosList.setAdapter(new ImageAdapter(MainActivity.this, photos));
+
         photosList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent photoDetailes = new Intent(MainActivity.this, PhotoDetails.class);
@@ -123,19 +100,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
-/*        serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder iBinder) {
-                myService = ((MyService.MyBinder)iBinder).getService();
-                myService.hideNotification();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
-*/
         Intent intent = new Intent(MainActivity.this, MyService.class);
         if (!isMyServiceRunning(MyService.class)){
             startService(intent);
@@ -189,7 +153,7 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
+//sign out dialog
     public void dialog(){
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Sign out")
@@ -198,11 +162,14 @@ public class MainActivity extends Activity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
+                        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(MainActivity.this, OptionsActivity.class));
                     }
                 }).create().show();
     }
-
+//check if the service is running
     private boolean isMyServiceRunning(Class<?> service){
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {

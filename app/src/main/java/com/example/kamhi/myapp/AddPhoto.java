@@ -33,6 +33,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.Calendar;
 
 public class AddPhoto extends Activity {
+//add photo screen, you can downloal from gallery or take a picture
 
     Button buttonSelectImage;
     Button buttonCaptureImage;
@@ -92,6 +93,7 @@ public class AddPhoto extends Activity {
 
     }
 
+    //start posting the chosen image
     private void startPosting() {
         progressDialog.setMessage("Posting...");
         final String title = editTextTitle.getText().toString().trim();
@@ -128,6 +130,7 @@ public class AddPhoto extends Activity {
 
                         }
                     });
+                    MainActivity.currentUserMoney+=100;
                     progressDialog.dismiss();
                     Toast.makeText(AddPhoto.this, "Image was posted", Toast.LENGTH_LONG).show();
                     Intent goToAccountActivity = new Intent(AddPhoto.this, AccountActivity.class);

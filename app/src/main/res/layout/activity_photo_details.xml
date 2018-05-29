@@ -49,6 +49,16 @@
         android:layout_alignEnd="@+id/photo"
         android:layout_marginEnd="66dp" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circle_prograss_view"
+        android:layout_below="@+id/date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="125dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +75,8 @@
         android:layout_marginRight="20dp"
         android:padding="5dp"
         android:layout_below="@+id/photo"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -81,6 +92,6 @@
         android:layout_marginRight="20dp"
         android:padding="5dp"
         android:layout_below="@+id/title"
-        android:layout_alignStart="@+id/photo" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

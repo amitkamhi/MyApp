@@ -38,6 +38,7 @@ import java.util.Calendar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SetUpAccountActivity extends Activity {
+//Set up account, change user photo, name, phone number and birthday.
 
     CircleImageView imageButton;
     EditText editTextUserName;
@@ -211,6 +212,8 @@ public class SetUpAccountActivity extends Activity {
             }
         }
     }
+
+    //set up the account
     private void startSetUpAccount() {
         String name = editTextUserName.getText().toString().trim();
         String birthday = editTextBirthday.getText().toString().trim();

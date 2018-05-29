@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignInActivity extends Activity {
+//Sign in to an account
 
     FirebaseAuth firebaseAuth;
     Button buttonSignIn;
@@ -24,14 +25,12 @@ public class SignInActivity extends Activity {
     EditText editTextPassword;
     ProgressDialog progressDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
         buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -49,6 +48,7 @@ public class SignInActivity extends Activity {
         super.onStart();
     }
 
+    //start sign in
     private void startSignIn() {
         progressDialog.setMessage("Starting sign in");
         String email = editTextEmail.getText().toString();

@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import static android.content.ContentValues.TAG;
 
 public class OptionsActivity extends Activity {
-
+//Shows options to a not connect user, to sign in or to register.
     Button buttonGoTOSignIn;
     Button buttonRegister;
     static final int MY_PERMISSIONS_READ_EXTERNAL_STORAGE = 2;
@@ -34,7 +34,32 @@ public class OptionsActivity extends Activity {
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
             MainActivity.currentUserUid = firebaseAuth.getCurrentUser().getUid().toString();
-            startActivity(new Intent(OptionsActivity.this, MainActivity.class));
+            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("money").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    MainActivity.currentUserMoney = Integer.parseInt(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("deals").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    MainActivity.currentUserDeals = Integer.parseInt(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            MainActivity.databaseReferencePhotos = FirebaseDatabase.getInstance().getReference().child("photos");
+            Intent goToAccountActivity = new Intent(OptionsActivity.this, AccountActivity.class);
+            goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
+            startActivity(goToAccountActivity);
         }
 
         buttonGoTOSignIn = (Button) findViewById(R.id.buttonGoToSignIn);
@@ -58,7 +83,7 @@ public class OptionsActivity extends Activity {
         CheckPermissoins();
         super.onResume();
     }
-
+//ask for permissions from the user.
     private void CheckPermissoins(){
         if ((checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)) != PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_READ_EXTERNAL_STORAGE);

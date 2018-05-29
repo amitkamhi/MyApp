@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.Calendar;
 
 public class PhotoDetails extends Activity {
+// A screen for a single photo, shows details about the photo and allows to buy or delete photo.
 
     ImageView photo;
     TextView title;
@@ -34,6 +36,7 @@ public class PhotoDetails extends Activity {
     TextView username;
     TextView date;
     Button option;
+    ProgressBar progressBar;
     ProgressDialog progressDialog;
     DatabaseReference databaseReferenceDeals;
     DatabaseReference databaseReferenceUsers;
@@ -44,7 +47,8 @@ public class PhotoDetails extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_details);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         photo = (ImageView) findViewById(R.id.photo);
         title = (TextView) findViewById(R.id.title);
         description = (TextView) findViewById(R.id.description);
@@ -56,6 +60,8 @@ public class PhotoDetails extends Activity {
         databaseReferenceUsers = FirebaseDatabase.getInstance().getReference().child("users");
 
         Glide.with(PhotoDetails.this).load(getIntent().getStringExtra("image")).into(photo);
+        progressBar.setVisibility(View.GONE);
+
         title.setText("Title: "+ getIntent().getStringExtra("title"));
         description.setText("Description: " + getIntent().getStringExtra("description"));
         username.setText(getIntent().getStringExtra("username"));
@@ -138,13 +144,8 @@ public class PhotoDetails extends Activity {
                         }
                     });
                     MainActivity.currentUserMoney-=100;
-                    databaseReferenceUsers.child(MainActivity.currentUserUid).child("money").setValue(MainActivity.currentUserMoney);
                     MainActivity.currentUserDeals+=1;
-                    databaseReferenceUsers.child(MainActivity.currentUserUid).child("deals").setValue(MainActivity.currentUserDeals);
                     //set message to the former user
-    //                DatabaseReference message = databaseReferenceUsers.getParent().child(MainActivity.currentUserUid).push();
-  //                  message.child("message").setValue("this item was bought");
-//                    message.child("image").setValue();
   //                  showNotification(item.child("image").toString());
                     progressDialog.dismiss();
                     Toast.makeText(PhotoDetails.this, "item was bought", Toast.LENGTH_LONG).show();
@@ -158,6 +159,7 @@ public class PhotoDetails extends Activity {
 
     }
 
+    //sent notification when a deal has been made.
     public void showNotification(String url){
         this.notif = new MyNotification(this, PhotoDetails.class);
         notif.update(MyNotification.NOTIF1, "An item was brougt from you", url);

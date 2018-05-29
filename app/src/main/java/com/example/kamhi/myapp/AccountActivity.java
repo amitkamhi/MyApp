@@ -47,6 +47,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountActivity extends Activity {
+// private account screen, shows details about the user
 
     String uid;
     CircleImageView profilePicture;
@@ -73,6 +74,7 @@ public class AccountActivity extends Activity {
         profilePicture = (CircleImageView) findViewById(R.id.profilePicture);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+        textViewMoney.setText(MainActivity.currentUserMoney +"$");
 
         databaseReferenceUser.child("name").addValueEventListener(new ValueEventListener() {
             @Override
@@ -118,31 +120,6 @@ public class AccountActivity extends Activity {
 
             }
         });
-        databaseReferenceUser.child("money").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    if (dataSnapshot.getValue() != null) {
-                        try {
-                            textViewMoney.setText(dataSnapshot.getValue().toString() +"$");
-                            if (textViewMoney == null)
-                                textViewMoney.setText("10000");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
 
         buttonGoToMainPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +191,8 @@ public class AccountActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("money").setValue(MainActivity.currentUserMoney);
+                            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("deals").setValue(MainActivity.currentUserDeals);
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(AccountActivity.this, OptionsActivity.class));
                         }

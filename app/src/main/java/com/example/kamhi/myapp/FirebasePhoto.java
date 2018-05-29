@@ -5,7 +5,7 @@ package com.example.kamhi.myapp;
  */
 
 public class FirebasePhoto {
-
+//photo class, shows details of photo
     String title;
     String description;
     String image;

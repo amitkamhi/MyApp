@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class ImageAdapter extends BaseAdapter{
-
+//class that creates image view for a photo
     ArrayList<FirebasePhoto> photos;
     private Context context;
 

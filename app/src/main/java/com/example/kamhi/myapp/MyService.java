@@ -21,7 +21,7 @@ import java.util.Date;
  */
 
 public class MyService extends Service {
-
+//The service, sent happy birthday to user
     Worker myWorker;
     MyNotification notif;
     SimpleDateFormat fmt;

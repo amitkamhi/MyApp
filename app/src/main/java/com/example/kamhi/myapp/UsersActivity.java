@@ -18,12 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersActivity extends Activity {
+//Shows users list
 
     DatabaseReference databaseReferenceUsers;
     ListView usersList;
     FirebaseListAdapter<User> firebaseListAdapter;
     Button buttonGoToMainPage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,7 @@ public class UsersActivity extends Activity {
                 R.layout.users_layout,
                 databaseReferenceUsers
         ) {
-
-         @Override
+            @Override
             protected void populateView(View v, User model, int position) {
                 Glide.with(UsersActivity.this).load(model.getImage()).into(((CircleImageView)v.findViewById(R.id.userPic)));
                 ((TextView)v.findViewById(R.id.userEmail)).setText(model.getEmail());
@@ -73,8 +72,7 @@ public class UsersActivity extends Activity {
         });
 
     }
-
-
+    //user class, shows details of user
     public static class User {
 
         String email;

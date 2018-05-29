@@ -26,7 +26,7 @@ import java.net.URL;
  */
 
 public class MyNotification {
-
+//sent notifications to users
     final int PENDING_REQUEST = 0;
     Notification.Builder builder;
     static NotificationManager notiManager = null;
