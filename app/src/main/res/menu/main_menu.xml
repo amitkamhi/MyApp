@@ -6,17 +6,24 @@
         android:id="@+id/action_add"
         android:title="add photo"
         android:icon="@android:drawable/ic_input_add"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="true"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/action_set_up_account"
+        android:title="set up account"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/write_to_us"
+        android:title="write to us"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_sign_out"
         android:title="sign out"
         app:showAsAction="never"/>
 
-
-    <item
-        android:id="@+id/action_set_up_account"
-        android:title="set up account"
-        app:showAsAction="never"/>
 
 </menu>

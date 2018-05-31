@@ -258,6 +258,9 @@ public class SetUpAccountActivity extends Activity {
         }
         progressDialog.dismiss();
         Toast.makeText(SetUpAccountActivity.this, "Account was set up", Toast.LENGTH_LONG).show();
-        startActivity(new Intent(SetUpAccountActivity.this, MainActivity.class));
+        Intent goToAccountActivity = new Intent(SetUpAccountActivity.this, AccountActivity.class);
+        goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
+        startActivity(goToAccountActivity);
+
     }
 }

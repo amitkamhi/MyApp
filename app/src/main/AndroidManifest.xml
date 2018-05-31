@@ -10,7 +10,7 @@
     <application
         android:name=".MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/cart"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -40,8 +40,10 @@
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".SignInActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".AddPhoto" />
-        <activity android:name=".SetUpAccountActivity" />
+        <activity android:name=".AddPhoto"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SetUpAccountActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PhotoDetails" />
         <activity android:name=".UsersActivity"></activity>
     </application>

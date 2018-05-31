@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +37,6 @@ public class MainActivity extends Activity {
     static int currentUserMoney;
     static int currentUserDeals;
     private MyService myService;
-  //  private ServiceConnection serviceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MainActivity extends Activity {
             startActivity(new Intent(MainActivity.this, OptionsActivity.class));
         }
 
+        databaseReferencePhotos = FirebaseDatabase.getInstance().getReference().child("photos");
         databaseReferencePhotos.keepSynced(true);
         databaseReferencePhotos.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,6 +121,11 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,6 +144,41 @@ public class MainActivity extends Activity {
             startActivity(new Intent(MainActivity.this, SetUpAccountActivity.class));
         }
 
+        if(item.getItemId() == R.id.write_to_us){
+            final EditText input = new EditText(MainActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("write to us")
+                    .setMessage("write some thing you want to tell us")
+                    .setView(input)
+                    .setNegativeButton("cancel", null)
+                    .setPositiveButton("send", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final DatabaseReference message = FirebaseDatabase.getInstance().getReference().child("messages").push();
+                            message.child("message").setValue(input.getText().toString());
+                            message.child("uid").setValue(MainActivity.currentUserUid);
+                            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("name").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    message.child("username").setValue(dataSnapshot.getValue());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        }
+                    }).create().show();
+
+        }
+
+
         if(item.getItemId() == R.id.action_sign_out){
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Sign out")
@@ -145,6 +187,8 @@ public class MainActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
+                            FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainActivity.this, OptionsActivity.class));
                         }

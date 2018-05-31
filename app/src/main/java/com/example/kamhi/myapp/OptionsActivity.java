@@ -56,7 +56,6 @@ public class OptionsActivity extends Activity {
 
                 }
             });
-            MainActivity.databaseReferencePhotos = FirebaseDatabase.getInstance().getReference().child("photos");
             Intent goToAccountActivity = new Intent(OptionsActivity.this, AccountActivity.class);
             goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
             startActivity(goToAccountActivity);
