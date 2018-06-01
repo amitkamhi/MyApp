@@ -180,6 +180,10 @@ public class AccountActivity extends Activity {
             startActivity(new Intent(AccountActivity.this, AddPhoto.class));
         }
 
+        if(item.getItemId() == R.id.action_messages){
+            startActivity(new Intent(AccountActivity.this, MessagesActivity.class));
+        }
+
         if(item.getItemId() == R.id.action_set_up_account){
             startActivity(new Intent(AccountActivity.this, SetUpAccountActivity.class));
         }
