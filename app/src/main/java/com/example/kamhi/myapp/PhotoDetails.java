@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewDebug;
@@ -25,6 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 
 public class PhotoDetails extends Activity {
@@ -58,6 +65,7 @@ public class PhotoDetails extends Activity {
         progressDialog = new ProgressDialog(PhotoDetails.this);
         databaseReferenceDeals = FirebaseDatabase.getInstance().getReference().child("deals");
         databaseReferenceUsers = FirebaseDatabase.getInstance().getReference().child("users");
+
 
         Glide.with(PhotoDetails.this).load(getIntent().getStringExtra("image")).into(photo);
         progressBar.setVisibility(View.GONE);
@@ -108,50 +116,65 @@ public class PhotoDetails extends Activity {
             option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    progressDialog.setMessage("buying item...");
-                    progressDialog.show();
-                    if (MainActivity.currentUserMoney < 100) {
-                        Toast.makeText(PhotoDetails.this, "You don't have enoght money to buy this item", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    item = FirebaseDatabase.getInstance().getReference().child("photos").child(getIntent().getStringExtra("parent"));
-                    final DatabaseReference newDeal = databaseReferenceDeals.push();
-                    //write the deal
-                    newDeal.child("formerUser").child("uid").setValue(getIntent().getStringExtra("uid"));
-                    newDeal.child("formerUser").child("username").setValue(getIntent().getStringExtra("username"));
-                    newDeal.child("title").setValue(getIntent().getStringExtra("title"));
-                    newDeal.child("description").setValue(getIntent().getStringExtra("description"));
-                    newDeal.child("image").setValue(getIntent().getStringExtra("image"));
-                    newDeal.child("parent").setValue(getIntent().getStringExtra("parent"));
-                    Calendar calander = Calendar.getInstance();
-                    String cDay = Integer.toString(calander.get(Calendar.DAY_OF_MONTH));
-                    String cMonth = Integer.toString(calander.get(Calendar.MONTH) + 1);
-                    String cYear = Integer.toString(calander.get(Calendar.YEAR));
-                    newDeal.child("date").setValue(cDay + "." + cMonth + "." + cYear);
-                    newDeal.child("newUser").child("uid").setValue(MainActivity.currentUserUid);
-                    databaseReferenceUsers.child(MainActivity.currentUserUid).child("name").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            newDeal.child("newUser").child("username").setValue(dataSnapshot.getValue());
-                            //make the change
-                            item.child("uid").setValue(MainActivity.currentUserUid);
-                            item.child("username").setValue(dataSnapshot.getValue());
-                        }
+                    new AlertDialog.Builder(PhotoDetails.this)
+                            .setTitle("Buy item")
+                            .setMessage("Do you want to buy this item?")
+                            .setNegativeButton("No", null)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressDialog.setMessage("buying item...");
+                                    progressDialog.show();
+                                    if (MainActivity.currentUserMoney < 100) {
+                                        Toast.makeText(PhotoDetails.this, "You don't have enoght money to buy this item", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    item = FirebaseDatabase.getInstance().getReference().child("photos").child(getIntent().getStringExtra("parent"));
+                                    final DatabaseReference newDeal = databaseReferenceDeals.push();
+                                    //write the deal
+                                    newDeal.child("formerUser").child("uid").setValue(getIntent().getStringExtra("uid"));
+                                    newDeal.child("formerUser").child("username").setValue(getIntent().getStringExtra("username"));
+                                    newDeal.child("title").setValue(getIntent().getStringExtra("title"));
+                                    newDeal.child("description").setValue(getIntent().getStringExtra("description"));
+                                    newDeal.child("image").setValue(getIntent().getStringExtra("image"));
+                                    newDeal.child("parent").setValue(getIntent().getStringExtra("parent"));
+                                    Calendar calander = Calendar.getInstance();
+                                    String cDay = Integer.toString(calander.get(Calendar.DAY_OF_MONTH));
+                                    String cMonth = Integer.toString(calander.get(Calendar.MONTH) + 1);
+                                    String cYear = Integer.toString(calander.get(Calendar.YEAR));
+                                    newDeal.child("date").setValue(cDay + "." + cMonth + "." + cYear);
+                                    newDeal.child("newUser").child("uid").setValue(MainActivity.currentUserUid);
+                                    databaseReferenceUsers.child(MainActivity.currentUserUid).child("name").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            newDeal.child("newUser").child("username").setValue(dataSnapshot.getValue());
+                                            //make the change
+                                            item.child("uid").setValue(MainActivity.currentUserUid);
+                                            item.child("username").setValue(dataSnapshot.getValue());
+                                            item.child("parent").setValue(getIntent().getStringExtra("parent"));
+                                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
-                    MainActivity.currentUserMoney-=100;
-                    MainActivity.currentUserDeals+=1;
-                    //set message to the former user
-  //                  showNotification(item.child("image").toString());
-                    progressDialog.dismiss();
-                    Toast.makeText(PhotoDetails.this, "item was bought", Toast.LENGTH_LONG).show();
-                    Intent goToAccountActivity = new Intent(PhotoDetails.this, AccountActivity.class);
-                    goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
-                    startActivity(goToAccountActivity);
+                                        }
+                                    });
+                                    MainActivity.currentUserMoney-=100;
+                                    MainActivity.currentUserDeals+=1;
+                                    //set message to the former user
+//                                    showNotification();
+                                    DatabaseReference message = FirebaseDatabase.getInstance().getReference().child("usersMessages").child(getIntent().getStringExtra("uid")).push();
+                                    message.child("message").setValue("An item was bought from you");
+                                    message.child("image").setValue(getIntent().getStringExtra("image"));
+                                    progressDialog.dismiss();
+                                    Toast.makeText(PhotoDetails.this, "item was bought", Toast.LENGTH_LONG).show();
+                                    Intent goToAccountActivity = new Intent(PhotoDetails.this, AccountActivity.class);
+                                    goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
+                                    startActivity(goToAccountActivity);
+
+                                }
+                            }).create().show();
+
                 }
 
             });
@@ -159,10 +182,11 @@ public class PhotoDetails extends Activity {
 
     }
 
+
     //sent notification when a deal has been made.
-    public void showNotification(String url){
+    public void showNotification(){
         this.notif = new MyNotification(this, PhotoDetails.class);
-        notif.update(MyNotification.NOTIF1, "An item was brougt from you", url);
+        notif.update(MyNotification.NOTIF1, "An item was brougt from you");
     }
 
 }

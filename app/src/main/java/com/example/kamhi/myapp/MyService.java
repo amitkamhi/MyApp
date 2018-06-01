@@ -47,26 +47,12 @@ public class MyService extends Service {
     }*/
 
     public void askForUserBirthday(){
-        FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("birthday").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
                 fmt = new SimpleDateFormat("dd.MM.yyyy");
                 try {
-                    String birthday = dataSnapshot.getValue().toString();
-                    userBirthday = fmt.parse(birthday);
-                    synchronized (userBirthday){
-                        userBirthday.notifyAll();
-                    }
+                    userBirthday = fmt.parse(MainActivity.currentUserBirthday);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void showNotification(){
@@ -120,7 +106,7 @@ public class MyService extends Service {
             if (userMonth==month && userDay==day) {
                     Log.i("today", "user birthday is today");
                 if (notif!=null){
-                    notif.update(MyNotification.NOTIF1, "Happy birthday", null);
+                    notif.update(MyNotification.NOTIF1, "Happy birthday");
                 }
             }
             Log.i("birthday",userBirthday.toString());

@@ -40,11 +40,11 @@ public class MyNotification {
         builder = new Notification.Builder(context);
         if(classNotification == MyService.class) {
             builder.setTicker("My Service")
-                    .setContentTitle("MyApp want to wish you")
+                    .setContentTitle("PicaPic want to wish you")
                     .setSmallIcon(R.drawable.birthday_cake)
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(false)
-                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                    .setVibrate(new long[]{100, 100, 100, 100, 100})
                     .setSound(Uri.parse("uri://sadfasdfasdf.mp3"));
         }
         else{
@@ -60,35 +60,16 @@ public class MyNotification {
         }
     }
 
-    public void update(int notificationId, String message, String url){
-            builder.setContentText(message).setOnlyAlertOnce(false);
-            if(url!=null){
-//                builder.setStyle(new Notification.BigPictureStyle().bigPicture(getBitmap(url)));
-
-            }
-            Notification noti = builder.build();
-            noti.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-            notiManager.notify(notificationId, noti);
-
-          //  builder.setStyle(new Notification.BigPictureStyle()
-        //            .bigPicture(FirebaseStorage.getInstance().getReference().child("photos").child(url)));
-
+    public void update(int notificationId, String message){
+        builder.setContentText(message).setOnlyAlertOnce(false);
+//        if (bitmap != null){
+//           builder.setStyle(new Notification.BigPictureStyle().bigPicture(bitmap));
+//        }
+        Notification noti = builder.build();
+        noti.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+        notiManager.notify(notificationId, noti);
     }
 
-    public static Bitmap getBitmap(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public void stop(int notificationId){
         notiManager.cancel(notificationId);

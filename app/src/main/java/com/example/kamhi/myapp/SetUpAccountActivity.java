@@ -252,6 +252,7 @@ public class SetUpAccountActivity extends Activity {
         }
         if (!TextUtils.isEmpty(birthday)) {
             databaseReferenceUser.child("birthday").setValue(birthday);
+            MainActivity.currentUserBirthday = birthday;
         }
         if (!TextUtils.isEmpty(phoneNumber)) {
             databaseReferenceUser.child("phoneNumber").setValue(phoneNumber);

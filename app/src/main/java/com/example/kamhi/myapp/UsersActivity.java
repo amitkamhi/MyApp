@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,11 +23,15 @@ public class UsersActivity extends Activity {
     ListView usersList;
     FirebaseListAdapter<User> firebaseListAdapter;
     Button buttonGoToMainPage;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users);
+        setContentView(R.layout.activity_information);
+
+        textView = (TextView)findViewById(R.id.textView);
+        textView.setText("Users");
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseReferenceUsers = FirebaseDatabase.getInstance().getReference().child("users");

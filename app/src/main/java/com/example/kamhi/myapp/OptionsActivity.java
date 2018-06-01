@@ -56,6 +56,17 @@ public class OptionsActivity extends Activity {
 
                 }
             });
+            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("birthday").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    MainActivity.currentUserBirthday = dataSnapshot.getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             Intent goToAccountActivity = new Intent(OptionsActivity.this, AccountActivity.class);
             goToAccountActivity.putExtra("userUid", MainActivity.currentUserUid);
             startActivity(goToAccountActivity);

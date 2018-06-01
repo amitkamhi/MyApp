@@ -159,6 +159,7 @@ public class AccountActivity extends Activity {
                 photoDetailes.putExtra("image", firebasePhoto.getImage());
                 photoDetailes.putExtra("username", firebasePhoto.getUsername());
                 photoDetailes.putExtra("uid", firebasePhoto.getUid());
+                photoDetailes.putExtra("parent", firebasePhoto.getParent());
                 startActivity(photoDetailes);
             }
         });
@@ -191,9 +192,9 @@ public class AccountActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("money").setValue(MainActivity.currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("deals").setValue(MainActivity.currentUserDeals);
-                            FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(AccountActivity.this, OptionsActivity.class));
                         }
                     }).create().show();}

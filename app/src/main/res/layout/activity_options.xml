@@ -34,15 +34,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="134dp" />
 
-    <ImageView
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/cart"
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="61dp" />
-
     <TextView
         android:text="Show it, Sell it, Get it!"
         android:layout_width="wrap_content"
@@ -50,8 +41,18 @@
         android:id="@+id/textViewIntro"
         android:textStyle="normal|bold"
         android:textSize="16sp"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/buttonGoToSignIn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="37dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cart"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/textViewIntro"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="37dp" />
 
 
 </RelativeLayout>

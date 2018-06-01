@@ -5,7 +5,15 @@
     <item
         android:id="@+id/action_add"
         android:title="add photo"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_add_white_24dp"
+        app:showAsAction="always"
+        android:visible="true"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/action_messages"
+        android:title="messages"
+        android:icon="@drawable/message"
         app:showAsAction="always"
         android:visible="true"
         android:checkable="true" />

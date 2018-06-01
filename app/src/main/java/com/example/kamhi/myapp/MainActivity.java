@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
     static int currentUserMoney;
     static int currentUserDeals;
     private MyService myService;
+    static String currentUserBirthday = "00.00.0000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,11 @@ public class MainActivity extends Activity {
             startActivity(new Intent(MainActivity.this, AddPhoto.class));
         }
 
+        if(item.getItemId() == R.id.action_messages){
+            startActivity(new Intent(MainActivity.this, MessagesActivity.class));
+        }
+
+
         if(item.getItemId() == R.id.action_set_up_account){
             startActivity(new Intent(MainActivity.this, SetUpAccountActivity.class));
         }
@@ -187,9 +193,9 @@ public class MainActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
-                            FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainActivity.this, OptionsActivity.class));
                         }
                     }).create().show();
@@ -197,22 +203,7 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-//sign out dialog
-    public void dialog(){
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Sign out")
-                .setMessage("Do you want to sign out?")
-                .setNegativeButton("No", null)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
-                        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(MainActivity.this, OptionsActivity.class));
-                    }
-                }).create().show();
-    }
+
 //check if the service is running
     private boolean isMyServiceRunning(Class<?> service){
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

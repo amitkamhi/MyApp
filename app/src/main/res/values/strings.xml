@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Brage</string>
+    <string name="app_name">PicaPic</string>
     <string name="title_activity_connect_to_database">ConnectToDatabaseActivity</string>
 </resources>
