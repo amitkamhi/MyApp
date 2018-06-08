@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -193,10 +191,11 @@ public class MainActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
-                            startActivity(new Intent(MainActivity.this, OptionsActivity.class));
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MainActivity.this, OptionsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
                         }
                     }).create().show();
         }

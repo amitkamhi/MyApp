@@ -196,10 +196,11 @@ public class AccountActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("money").setValue(MainActivity.currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("deals").setValue(MainActivity.currentUserDeals);
-                            startActivity(new Intent(AccountActivity.this, OptionsActivity.class));
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(AccountActivity.this, OptionsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
                         }
                     }).create().show();}
 

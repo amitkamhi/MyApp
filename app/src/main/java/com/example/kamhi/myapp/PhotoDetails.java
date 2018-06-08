@@ -48,7 +48,7 @@ public class PhotoDetails extends Activity {
     DatabaseReference databaseReferenceDeals;
     DatabaseReference databaseReferenceUsers;
     DatabaseReference item;
-    MyNotification notif;
+//    MyNotification notif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,8 +185,8 @@ public class PhotoDetails extends Activity {
 
     //sent notification when a deal has been made.
     public void showNotification(){
-        this.notif = new MyNotification(this, PhotoDetails.class);
-        notif.update(MyNotification.NOTIF1, "An item was brougt from you");
+//        this.notif = new MyNotification(this, PhotoDetails.class);
+//        notif.update(MyNotification.NOTIF1, "An item was brougt from you");
     }
 
 }
