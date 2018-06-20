@@ -50,6 +50,7 @@ public class SignInActivity extends Activity {
 
     //start sign in
     private void startSignIn() {
+        FirebaseAuth.getInstance().signOut();
         progressDialog.setMessage("Starting sign in");
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();

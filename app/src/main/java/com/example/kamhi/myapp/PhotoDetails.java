@@ -134,8 +134,8 @@ public class PhotoDetails extends Activity implements PhotoActions{
         item = FirebaseDatabase.getInstance().getReference().child("photos").child(getIntent().getStringExtra("parent"));
         final DatabaseReference newDeal = databaseReferenceDeals.push();
         //write the deal
-        newDeal.child("formerUser").child("uid").setValue(getIntent().getStringExtra("uid"));
-        newDeal.child("formerUser").child("username").setValue(getIntent().getStringExtra("username"));
+        newDeal.child("formerUserUid").setValue(getIntent().getStringExtra("uid"));
+        newDeal.child("formerUserUsername").setValue(getIntent().getStringExtra("username"));
         newDeal.child("title").setValue(getIntent().getStringExtra("title"));
         newDeal.child("description").setValue(getIntent().getStringExtra("description"));
         newDeal.child("image").setValue(getIntent().getStringExtra("image"));
@@ -145,11 +145,11 @@ public class PhotoDetails extends Activity implements PhotoActions{
         String cMonth = Integer.toString(calander.get(Calendar.MONTH) + 1);
         String cYear = Integer.toString(calander.get(Calendar.YEAR));
         newDeal.child("date").setValue(cDay + "." + cMonth + "." + cYear);
-        newDeal.child("newUser").child("uid").setValue(MainActivity.currentUserUid);
+        newDeal.child("newUserUid").setValue(MainActivity.currentUserUid);
         databaseReferenceUsers.child(MainActivity.currentUserUid).child("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                newDeal.child("newUser").child("username").setValue(dataSnapshot.getValue());
+                newDeal.child("newUserUsername").setValue(dataSnapshot.getValue());
                 //make the change
                 item.child("uid").setValue(MainActivity.currentUserUid);
                 item.child("username").setValue(dataSnapshot.getValue());

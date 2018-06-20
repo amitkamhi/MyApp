@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -188,6 +189,39 @@ public class AccountActivity extends Activity {
             startActivity(new Intent(AccountActivity.this, SetUpAccountActivity.class));
         }
 
+        if(item.getItemId() == R.id.write_to_us){
+            final EditText input = new EditText(AccountActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            new AlertDialog.Builder(AccountActivity.this)
+                    .setTitle("write to us")
+                    .setMessage("write some thing you want to tell us")
+                    .setView(input)
+                    .setNegativeButton("cancel", null)
+                    .setPositiveButton("send", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final DatabaseReference message = FirebaseDatabase.getInstance().getReference().child("messages").push();
+                            message.child("message").setValue(input.getText().toString());
+                            message.child("uid").setValue(MainActivity.currentUserUid);
+                            FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("name").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    message.child("username").setValue(dataSnapshot.getValue());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            startActivity(new Intent(AccountActivity.this, AccountActivity.class));
+                        }
+                    }).create().show();
+        }
+
         if(item.getItemId() == R.id.action_sign_out){
             new AlertDialog.Builder(AccountActivity.this)
                     .setTitle("Sign out")
@@ -196,6 +230,7 @@ public class AccountActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("money").setValue(MainActivity.currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(MainActivity.currentUserUid).child("deals").setValue(MainActivity.currentUserDeals);
                             FirebaseAuth.getInstance().signOut();

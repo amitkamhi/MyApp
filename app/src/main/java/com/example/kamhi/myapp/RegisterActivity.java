@@ -70,6 +70,7 @@ public class RegisterActivity extends Activity {
     }
 //Register
     private void startRegister() {
+        FirebaseAuth.getInstance().signOut();
         final String name = editTextName.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();

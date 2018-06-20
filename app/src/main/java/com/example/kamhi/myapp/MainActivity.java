@@ -179,7 +179,6 @@ public class MainActivity extends Activity {
                             startActivity(new Intent(MainActivity.this, MainActivity.class));
                         }
                     }).create().show();
-
         }
 
 
@@ -191,6 +190,7 @@ public class MainActivity extends Activity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("money").setValue(currentUserMoney);
                             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("deals").setValue(currentUserDeals);
                             FirebaseAuth.getInstance().signOut();
